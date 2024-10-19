@@ -42,32 +42,36 @@ export const register = (nombre, nombreUsuario, email, password) => (dispatch) =
     );
 };
 
-export const login = (nombreUsuario, password) => (dispatch) =>{
-    return AuthService.login(nombreUsuario,password).then(
+export const login = (nombreUsuario, password) => (dispatch) => {
+    return AuthService.login(nombreUsuario, password).then(
         (data) => {
             console.log(data);
             dispatch({
                 type: LOGIN_SUCCESS,
-                payload: {user: data},
+                payload: { user: data },
             });
-
             return Promise.resolve();
         },
-        (error) =>{
-            const message = 
-              (error.response && error.response.data &&
-                error.response.data.message) || error.message || error.toString();
-              
-                dispatch({
-                    type: LOGIN_FAIL,
-                });
+        (error) => {
+            let message;
+            if (error.response && error.response.status === 401) {
+                message = 'Ops, parece que los datos son incorrectos!';
+            } else {
+                message = 
+                  (error.response && error.response.data && 
+                    error.response.data.message) || error.message || error.toString();
+            }
 
-                dispatch({
-                    type: SET_MESSAGE,
-                    payload: message,
-                });
+            dispatch({
+                type: LOGIN_FAIL,
+            });
 
-                return Promise.reject();
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return Promise.reject();
         }
     );
 };
