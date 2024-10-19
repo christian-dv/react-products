@@ -46,8 +46,11 @@ class Products extends Component {
           timer: 1000,
         });
         this.handleClose();
+        this.setState({
+          nombre: '',
+          precio: ''
+        });
         this.fetchProducts();
-        setTimeout(() => window.location.reload(), 1000);
       });
     };
   
@@ -97,7 +100,6 @@ class Products extends Component {
         });
         this.handleEditClose();
         this.fetchProducts();
-        setTimeout(() => window.location.reload(), 1000);
       });
     };
   
